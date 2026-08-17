@@ -46,6 +46,23 @@ namespace StudentRecords.App.Repositories
             SaveAll(students);
         }
 
+        public void Update(Student student)
+        {
+            List<Student> students = GetAll();
+
+            Student? existingStudent =
+                students.FirstOrDefault(s => s.Id == student.Id);
+
+            if (existingStudent != null)
+            {
+                existingStudent.Name = student.Name;
+                existingStudent.Age = student.Age;
+                existingStudent.Course = student.Course;
+
+                SaveAll(students);
+            }
+        }
+
         public void Delete(int id)
         {
             List<Student> students = GetAll();

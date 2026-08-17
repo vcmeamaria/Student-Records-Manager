@@ -25,8 +25,9 @@ while (keepRunning)
     Console.WriteLine("1. View all students");
     Console.WriteLine("2. Find student by ID");
     Console.WriteLine("3. Add student");
-    Console.WriteLine("4. Delete student");
-    Console.WriteLine("5. Exit");
+    Console.WriteLine("4. Update student");
+    Console.WriteLine("5. Delete student");
+    Console.WriteLine("6. Exit");
     Console.WriteLine();
 
     Console.Write("Choose an option: ");
@@ -147,6 +148,64 @@ while (keepRunning)
             break;
 
         case "4":
+            Console.Write("Enter student ID to update: ");
+            string? updateIdInput = Console.ReadLine();
+
+            if (!int.TryParse(updateIdInput, out int updateId))
+            {
+                Console.WriteLine("Invalid ID. Please enter a number.");
+                break;
+            }
+
+            Console.Write("Enter new student name: ");
+            string? updatedName = Console.ReadLine();
+
+            Console.Write("Enter new student age: ");
+            string? updatedAgeInput = Console.ReadLine();
+
+            if (!int.TryParse(updatedAgeInput, out int updatedAge))
+            {
+                Console.WriteLine("Invalid age. Please enter a number.");
+                break;
+            }
+
+            Console.Write("Enter new student course: ");
+            string? updatedCourse = Console.ReadLine();
+
+            Student updatedStudent = new Student
+            {
+                Id = updateId,
+                Name = updatedName ?? "",
+                Age = updatedAge,
+                Course = updatedCourse ?? ""
+            };
+
+            try
+            {
+                studentService.UpdateStudent(updatedStudent);
+
+                Console.WriteLine();
+                Console.WriteLine("Student updated successfully.");
+            }
+            catch (StudentNotFoundException exception)
+            {
+                Console.WriteLine();
+                Console.WriteLine(exception.Message);
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                Console.WriteLine();
+                Console.WriteLine(exception.Message);
+            }
+            catch (ArgumentException exception)
+            {
+                Console.WriteLine();
+                Console.WriteLine(exception.Message);
+            }
+
+            break;
+
+        case "5":
             Console.Write("Enter student ID to delete: ");
             string? deleteIdInput = Console.ReadLine();
 
@@ -171,7 +230,7 @@ while (keepRunning)
 
             break;
 
-        case "5":
+        case "6":
             keepRunning = false;
             Console.WriteLine("Goodbye!");
             break;
