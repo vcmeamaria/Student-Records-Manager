@@ -1,4 +1,5 @@
-﻿using StudentRecords.App.Models;
+﻿using StudentRecords.App.Exceptions;
+using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 
 namespace StudentRecords.App.Services
@@ -17,9 +18,16 @@ namespace StudentRecords.App.Services
             return _studentRepository.GetAll();
         }
 
-        public Student? GetStudentById(int id)
+        public Student GetStudentById(int id)
         {
-            return _studentRepository.GetById(id);
+            Student? student = _studentRepository.GetById(id);
+
+            if (student == null)
+            {
+                throw new StudentNotFoundException(id);
+            }
+
+            return student;
         }
 
         public void AddStudent(Student student)
@@ -29,6 +37,13 @@ namespace StudentRecords.App.Services
 
         public void DeleteStudent(int id)
         {
+            Student? student = _studentRepository.GetById(id);
+
+            if (student == null)
+            {
+                throw new StudentNotFoundException(id);
+            }
+
             _studentRepository.Delete(id);
         }
     }
