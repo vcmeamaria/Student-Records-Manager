@@ -34,7 +34,8 @@ namespace StudentRecords.App.Repositories
         {
             List<Student> students = GetAll();
 
-            return students.FirstOrDefault(student => student.Id == id);
+            return students.FirstOrDefault(
+                student => student.Id == id);
         }
 
         public void Add(Student student)
@@ -46,12 +47,31 @@ namespace StudentRecords.App.Repositories
             SaveAll(students);
         }
 
+        public void Update(Student student)
+        {
+            List<Student> students = GetAll();
+
+            Student? existingStudent =
+                students.FirstOrDefault(
+                    existing => existing.Id == student.Id);
+
+            if (existingStudent != null)
+            {
+                existingStudent.Name = student.Name;
+                existingStudent.Age = student.Age;
+                existingStudent.Course = student.Course;
+
+                SaveAll(students);
+            }
+        }
+
         public void Delete(int id)
         {
             List<Student> students = GetAll();
 
             Student? studentToDelete =
-                students.FirstOrDefault(student => student.Id == id);
+                students.FirstOrDefault(
+                    student => student.Id == id);
 
             if (studentToDelete != null)
             {
