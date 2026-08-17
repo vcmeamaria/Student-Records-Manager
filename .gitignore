@@ -36,3 +36,4 @@ Thumbs.db
 
 # Local student data
 StudentRecords.App/Data/students.json
+StudentRecords.App/Data/students.csv

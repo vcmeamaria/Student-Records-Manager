@@ -63,6 +63,25 @@ namespace StudentRecords.App.Services
                     group => group.Count());
         }
 
+        public void ExportStudentsToCsv(string filePath)
+        {
+            List<Student> students = _studentRepository.GetAll();
+
+            List<string> lines = new List<string>();
+
+            lines.Add("Id,Name,Age,Course");
+
+            foreach (Student student in students)
+            {
+                string line =
+                    $"{student.Id},{student.Name},{student.Age},{student.Course}";
+
+                lines.Add(line);
+            }
+
+            File.WriteAllLines(filePath, lines);
+        }
+
         public Student GetStudentById(int id)
         {
             Student? student = _studentRepository.GetById(id);

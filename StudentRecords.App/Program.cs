@@ -44,7 +44,8 @@ while (keepRunning)
     Console.WriteLine("6. Sort students");
     Console.WriteLine("7. Search students by name");
     Console.WriteLine("8. Course summary");
-    Console.WriteLine("9. Exit");
+    Console.WriteLine("9. Export students to CSV");
+    Console.WriteLine("10. Exit");
     Console.WriteLine();
 
     Console.Write("Choose an option: ");
@@ -355,6 +356,17 @@ while (keepRunning)
             break;
 
         case "9":
+            string csvFilePath =
+                Path.Combine(dataDirectory, "students.csv");
+
+            studentService.ExportStudentsToCsv(csvFilePath);
+
+            Console.WriteLine("Students exported successfully.");
+            Console.WriteLine($"CSV file: {csvFilePath}");
+
+            break;
+
+        case "10":
             keepRunning = false;
             Console.WriteLine("Goodbye!");
             break;
