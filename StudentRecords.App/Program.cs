@@ -53,6 +53,7 @@ while (keepRunning)
                 {
                     Console.WriteLine($"ID: {student.Id}");
                     Console.WriteLine($"Name: {student.Name}");
+                    Console.WriteLine($"Age: {student.Age}");
                     Console.WriteLine($"Course: {student.Course}");
                     Console.WriteLine("----------------------");
                 }
@@ -81,6 +82,7 @@ while (keepRunning)
 
                 Console.WriteLine($"ID: {student.Id}");
                 Console.WriteLine($"Name: {student.Name}");
+                Console.WriteLine($"Age: {student.Age}");
                 Console.WriteLine($"Course: {student.Course}");
             }
             catch (StudentNotFoundException exception)
@@ -103,6 +105,15 @@ while (keepRunning)
             Console.Write("Enter student name: ");
             string? name = Console.ReadLine();
 
+            Console.Write("Enter student age: ");
+            string? ageInput = Console.ReadLine();
+
+            if (!int.TryParse(ageInput, out int age))
+            {
+                Console.WriteLine("Invalid age. Please enter a number.");
+                break;
+            }
+
             Console.Write("Enter student course: ");
             string? course = Console.ReadLine();
 
@@ -110,6 +121,7 @@ while (keepRunning)
             {
                 Id = id,
                 Name = name ?? "",
+                Age = age,
                 Course = course ?? ""
             };
 
