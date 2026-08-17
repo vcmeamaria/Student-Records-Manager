@@ -42,7 +42,9 @@ while (keepRunning)
     Console.WriteLine("4. Update student");
     Console.WriteLine("5. Delete student");
     Console.WriteLine("6. Sort students");
-    Console.WriteLine("7. Exit");
+    Console.WriteLine("7. Search students by name");
+    Console.WriteLine("8. Course summary");
+    Console.WriteLine("9. Exit");
     Console.WriteLine();
 
     Console.Write("Choose an option: ");
@@ -255,35 +257,11 @@ while (keepRunning)
             Console.Write("Choose a sort option: ");
             string? sortChoice = Console.ReadLine();
 
-            List<Student> sortedStudents;
-
-            switch (sortChoice)
-            {
-                case "1":
-                    sortedStudents =
-                        studentService.GetStudentsSortedByName();
-                    break;
-
-                case "2":
-                    sortedStudents =
-                        studentService.GetStudentsSortedByAge();
-                    break;
-
-                case "3":
-                    sortedStudents =
-                        studentService.GetStudentsSortedByCourse();
-                    break;
-
-                default:
-                    Console.WriteLine("Invalid sort option.");
-                    break;
-            }
-
             if (sortChoice == "1" ||
                 sortChoice == "2" ||
                 sortChoice == "3")
             {
-                sortedStudents = sortChoice switch
+                List<Student> sortedStudents = sortChoice switch
                 {
                     "1" => studentService.GetStudentsSortedByName(),
                     "2" => studentService.GetStudentsSortedByAge(),
@@ -311,10 +289,72 @@ while (keepRunning)
                     }
                 }
             }
+            else
+            {
+                Console.WriteLine("Invalid sort option.");
+            }
 
             break;
 
         case "7":
+            Console.Write("Enter part of the student name: ");
+            string? searchName = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(searchName))
+            {
+                Console.WriteLine("Please enter a name to search for.");
+                break;
+            }
+
+            List<Student> matchingStudents =
+                studentService.SearchStudentsByName(searchName);
+
+            if (matchingStudents.Count == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("No matching students found.");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Matching Students:");
+                Console.WriteLine();
+
+                foreach (Student student in matchingStudents)
+                {
+                    Console.WriteLine($"ID: {student.Id}");
+                    Console.WriteLine($"Name: {student.Name}");
+                    Console.WriteLine($"Age: {student.Age}");
+                    Console.WriteLine($"Course: {student.Course}");
+                    Console.WriteLine("----------------------");
+                }
+            }
+
+            break;
+
+        case "8":
+            Dictionary<string, int> courseSummary =
+                studentService.GetCourseSummary();
+
+            if (courseSummary.Count == 0)
+            {
+                Console.WriteLine("No students found.");
+            }
+            else
+            {
+                Console.WriteLine("Course Summary:");
+                Console.WriteLine();
+
+                foreach (KeyValuePair<string, int> courseEntry in courseSummary)
+                {
+                    Console.WriteLine(
+                        $"{courseEntry.Key}: {courseEntry.Value} student(s)");
+                }
+            }
+
+            break;
+
+        case "9":
             keepRunning = false;
             Console.WriteLine("Goodbye!");
             break;
