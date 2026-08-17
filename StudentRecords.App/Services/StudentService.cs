@@ -32,6 +32,12 @@ namespace StudentRecords.App.Services
 
         public void AddStudent(Student student)
         {
+            Validate(
+                student.Id,
+                student.Name,
+                student.Age,
+                student.Course);
+
             _studentRepository.Add(student);
         }
 
@@ -45,6 +51,41 @@ namespace StudentRecords.App.Services
             }
 
             _studentRepository.Delete(id);
+        }
+
+        private static void Validate(
+            int id,
+            string name,
+            int age,
+            string course)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(id),
+                    "ID must be positive.");
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException(
+                    "Name is required.",
+                    nameof(name));
+            }
+
+            if (age < 16 || age > 80)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(age),
+                    "Age must be between 16 and 80.");
+            }
+
+            if (string.IsNullOrWhiteSpace(course))
+            {
+                throw new ArgumentException(
+                    "Course is required.",
+                    nameof(course));
+            }
         }
     }
 }

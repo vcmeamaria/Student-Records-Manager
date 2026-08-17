@@ -87,6 +87,7 @@ while (keepRunning)
             }
             catch (StudentNotFoundException exception)
             {
+                Console.WriteLine();
                 Console.WriteLine(exception.Message);
             }
 
@@ -125,10 +126,23 @@ while (keepRunning)
                 Course = course ?? ""
             };
 
-            studentService.AddStudent(newStudent);
+            try
+            {
+                studentService.AddStudent(newStudent);
 
-            Console.WriteLine();
-            Console.WriteLine("Student added successfully.");
+                Console.WriteLine();
+                Console.WriteLine("Student added successfully.");
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                Console.WriteLine();
+                Console.WriteLine(exception.Message);
+            }
+            catch (ArgumentException exception)
+            {
+                Console.WriteLine();
+                Console.WriteLine(exception.Message);
+            }
 
             break;
 
@@ -151,6 +165,7 @@ while (keepRunning)
             }
             catch (StudentNotFoundException exception)
             {
+                Console.WriteLine();
                 Console.WriteLine(exception.Message);
             }
 
