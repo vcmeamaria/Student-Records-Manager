@@ -1,4 +1,5 @@
-﻿using StudentRecords.App.Models;
+﻿using StudentRecords.App.Exceptions;
+using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 using StudentRecords.App.Services;
 
@@ -60,7 +61,33 @@ while (keepRunning)
             break;
 
         case "2":
-            Console.WriteLine("Find student by ID");
+            Console.Write("Enter student ID: ");
+            string? searchIdInput = Console.ReadLine();
+
+            if (!int.TryParse(searchIdInput, out int searchId))
+            {
+                Console.WriteLine("Invalid ID. Please enter a number.");
+                break;
+            }
+
+            try
+            {
+                Student student =
+                    studentService.GetStudentById(searchId);
+
+                Console.WriteLine();
+                Console.WriteLine("Student found:");
+                Console.WriteLine();
+
+                Console.WriteLine($"ID: {student.Id}");
+                Console.WriteLine($"Name: {student.Name}");
+                Console.WriteLine($"Course: {student.Course}");
+            }
+            catch (StudentNotFoundException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
             break;
 
         case "3":
