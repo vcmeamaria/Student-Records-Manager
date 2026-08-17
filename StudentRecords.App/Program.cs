@@ -64,7 +64,33 @@ while (keepRunning)
             break;
 
         case "3":
-            Console.WriteLine("Add student");
+            Console.Write("Enter student ID: ");
+            string? idInput = Console.ReadLine();
+
+            if (!int.TryParse(idInput, out int id))
+            {
+                Console.WriteLine("Invalid ID. Please enter a number.");
+                break;
+            }
+
+            Console.Write("Enter student name: ");
+            string? name = Console.ReadLine();
+
+            Console.Write("Enter student course: ");
+            string? course = Console.ReadLine();
+
+            Student newStudent = new Student
+            {
+                Id = id,
+                Name = name ?? "",
+                Course = course ?? ""
+            };
+
+            studentService.AddStudent(newStudent);
+
+            Console.WriteLine();
+            Console.WriteLine("Student added successfully.");
+
             break;
 
         case "4":
