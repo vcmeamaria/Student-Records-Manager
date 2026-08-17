@@ -41,6 +41,25 @@ namespace StudentRecords.App.Services
             _studentRepository.Add(student);
         }
 
+        public void UpdateStudent(Student student)
+        {
+            Validate(
+                student.Id,
+                student.Name,
+                student.Age,
+                student.Course);
+
+            Student? existingStudent =
+                _studentRepository.GetById(student.Id);
+
+            if (existingStudent == null)
+            {
+                throw new StudentNotFoundException(student.Id);
+            }
+
+            _studentRepository.Update(student);
+        }
+
         public void DeleteStudent(int id)
         {
             Student? student = _studentRepository.GetById(id);

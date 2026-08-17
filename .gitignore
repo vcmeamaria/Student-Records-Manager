@@ -33,3 +33,6 @@ Thumbs.db
 # Environment / secrets
 .env
 .env.*
+
+# Local student data
+StudentRecords.App/Data/students.json
