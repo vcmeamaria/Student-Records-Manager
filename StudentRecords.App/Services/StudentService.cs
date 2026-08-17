@@ -42,6 +42,27 @@ namespace StudentRecords.App.Services
                 .ToList();
         }
 
+        public List<Student> SearchStudentsByName(string searchTerm)
+        {
+            return _studentRepository
+                .GetAll()
+                .Where(student =>
+                    student.Name.Contains(
+                        searchTerm,
+                        StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
+        public Dictionary<string, int> GetCourseSummary()
+        {
+            return _studentRepository
+                .GetAll()
+                .GroupBy(student => student.Course)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Count());
+        }
+
         public Student GetStudentById(int id)
         {
             Student? student = _studentRepository.GetById(id);
