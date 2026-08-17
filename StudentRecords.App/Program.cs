@@ -1,4 +1,5 @@
-﻿using StudentRecords.App.Repositories;
+﻿using StudentRecords.App.Models;
+using StudentRecords.App.Repositories;
 using StudentRecords.App.Services;
 
 // Create the repository.
@@ -36,7 +37,26 @@ while (keepRunning)
     switch (choice)
     {
         case "1":
-            Console.WriteLine("View all students");
+            List<Student> students = studentService.GetAllStudents();
+
+            if (students.Count == 0)
+            {
+                Console.WriteLine("No students found.");
+            }
+            else
+            {
+                Console.WriteLine("Student Records:");
+                Console.WriteLine();
+
+                foreach (Student student in students)
+                {
+                    Console.WriteLine($"ID: {student.Id}");
+                    Console.WriteLine($"Name: {student.Name}");
+                    Console.WriteLine($"Course: {student.Course}");
+                    Console.WriteLine("----------------------");
+                }
+            }
+
             break;
 
         case "2":
