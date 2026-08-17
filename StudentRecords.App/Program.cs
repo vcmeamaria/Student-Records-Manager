@@ -121,7 +121,27 @@ while (keepRunning)
             break;
 
         case "4":
-            Console.WriteLine("Delete student");
+            Console.Write("Enter student ID to delete: ");
+            string? deleteIdInput = Console.ReadLine();
+
+            if (!int.TryParse(deleteIdInput, out int deleteId))
+            {
+                Console.WriteLine("Invalid ID. Please enter a number.");
+                break;
+            }
+
+            try
+            {
+                studentService.DeleteStudent(deleteId);
+
+                Console.WriteLine();
+                Console.WriteLine("Student deleted successfully.");
+            }
+            catch (StudentNotFoundException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
             break;
 
         case "5":
