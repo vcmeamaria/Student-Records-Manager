@@ -42,7 +42,8 @@ while (keepRunning)
     Console.WriteLine("4. Update student");
     Console.WriteLine("5. Delete student");
     Console.WriteLine("6. Sort students");
-    Console.WriteLine("7. Exit");
+    Console.WriteLine("7. Search students by name");
+    Console.WriteLine("8. Exit");
     Console.WriteLine();
 
     Console.Write("Choose an option: ");
@@ -315,6 +316,42 @@ while (keepRunning)
             break;
 
         case "7":
+            Console.Write("Enter part of the student name: ");
+            string? searchName = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(searchName))
+            {
+                Console.WriteLine("Please enter a name to search for.");
+                break;
+            }
+
+            List<Student> matchingStudents =
+                studentService.SearchStudentsByName(searchName);
+
+            if (matchingStudents.Count == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("No matching students found.");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Matching Students:");
+                Console.WriteLine();
+
+                foreach (Student student in matchingStudents)
+                {
+                    Console.WriteLine($"ID: {student.Id}");
+                    Console.WriteLine($"Name: {student.Name}");
+                    Console.WriteLine($"Age: {student.Age}");
+                    Console.WriteLine($"Course: {student.Course}");
+                    Console.WriteLine("----------------------");
+                }
+            }
+
+            break;
+
+        case "8":
             keepRunning = false;
             Console.WriteLine("Goodbye!");
             break;
