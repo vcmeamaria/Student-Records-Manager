@@ -3,14 +3,22 @@ using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 using StudentRecords.App.Services;
 
-// Create the Data folder if it does not already exist.
-string dataDirectory = "Data";
-string dataFilePath = Path.Combine(dataDirectory, "students.json");
+// Find the StudentRecords.App project folder.
+string projectDirectory =
+    Path.GetFullPath(
+        Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
 
+// Create the path to the Data folder.
+string dataDirectory =
+    Path.Combine(projectDirectory, "Data");
+
+string dataFilePath =
+    Path.Combine(dataDirectory, "students.json");
+
+// Create the Data folder if it does not exist.
 Directory.CreateDirectory(dataDirectory);
 
 // Create the repository.
-// Student data will be stored in Data/students.json.
 IStudentRepository repository =
     new JsonStudentRepository(dataFilePath);
 
@@ -33,7 +41,8 @@ while (keepRunning)
     Console.WriteLine("3. Add student");
     Console.WriteLine("4. Update student");
     Console.WriteLine("5. Delete student");
-    Console.WriteLine("6. Exit");
+    Console.WriteLine("6. Sort students");
+    Console.WriteLine("7. Exit");
     Console.WriteLine();
 
     Console.Write("Choose an option: ");
@@ -237,6 +246,75 @@ while (keepRunning)
             break;
 
         case "6":
+            Console.WriteLine("Sort students by:");
+            Console.WriteLine("1. Name");
+            Console.WriteLine("2. Age");
+            Console.WriteLine("3. Course");
+            Console.WriteLine();
+
+            Console.Write("Choose a sort option: ");
+            string? sortChoice = Console.ReadLine();
+
+            List<Student> sortedStudents;
+
+            switch (sortChoice)
+            {
+                case "1":
+                    sortedStudents =
+                        studentService.GetStudentsSortedByName();
+                    break;
+
+                case "2":
+                    sortedStudents =
+                        studentService.GetStudentsSortedByAge();
+                    break;
+
+                case "3":
+                    sortedStudents =
+                        studentService.GetStudentsSortedByCourse();
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid sort option.");
+                    break;
+            }
+
+            if (sortChoice == "1" ||
+                sortChoice == "2" ||
+                sortChoice == "3")
+            {
+                sortedStudents = sortChoice switch
+                {
+                    "1" => studentService.GetStudentsSortedByName(),
+                    "2" => studentService.GetStudentsSortedByAge(),
+                    "3" => studentService.GetStudentsSortedByCourse(),
+                    _ => new List<Student>()
+                };
+
+                if (sortedStudents.Count == 0)
+                {
+                    Console.WriteLine("No students found.");
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Sorted Student Records:");
+                    Console.WriteLine();
+
+                    foreach (Student student in sortedStudents)
+                    {
+                        Console.WriteLine($"ID: {student.Id}");
+                        Console.WriteLine($"Name: {student.Name}");
+                        Console.WriteLine($"Age: {student.Age}");
+                        Console.WriteLine($"Course: {student.Course}");
+                        Console.WriteLine("----------------------");
+                    }
+                }
+            }
+
+            break;
+
+        case "7":
             keepRunning = false;
             Console.WriteLine("Goodbye!");
             break;

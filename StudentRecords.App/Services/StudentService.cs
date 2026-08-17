@@ -18,6 +18,30 @@ namespace StudentRecords.App.Services
             return _studentRepository.GetAll();
         }
 
+        public List<Student> GetStudentsSortedByName()
+        {
+            return _studentRepository
+                .GetAll()
+                .OrderBy(student => student.Name)
+                .ToList();
+        }
+
+        public List<Student> GetStudentsSortedByAge()
+        {
+            return _studentRepository
+                .GetAll()
+                .OrderBy(student => student.Age)
+                .ToList();
+        }
+
+        public List<Student> GetStudentsSortedByCourse()
+        {
+            return _studentRepository
+                .GetAll()
+                .OrderBy(student => student.Course)
+                .ToList();
+        }
+
         public Student GetStudentById(int id)
         {
             Student? student = _studentRepository.GetById(id);
