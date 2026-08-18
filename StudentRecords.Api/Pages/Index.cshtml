@@ -1,0 +1,468 @@
+﻿@page
+@model StudentRecords.Api.Pages.IndexModel
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>Student Records Manager</title>
+
+    <link rel="stylesheet"
+          href="~/css/site.css" />
+
+</head>
+
+
+<body>
+
+    <main class="container">
+
+        <header>
+
+            <h1>Student Records Manager</h1>
+
+            <p>
+                Manage university student records
+            </p>
+
+        </header>
+
+
+        <!-- ========================= -->
+        <!-- Messages -->
+        <!-- ========================= -->
+        @if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <div class="success">
+
+                @Model.Message
+
+            </div>
+        }
+
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="error">
+
+                @Model.ErrorMessage
+
+            </div>
+        }
+
+
+        <!-- ========================= -->
+        <!-- Add Student -->
+        <!-- ========================= -->
+
+        <section class="card">
+
+            <h2>Add Student</h2>
+
+
+            <form method="post"
+                  asp-page-handler="Add">
+
+                <div class="form-grid">
+
+                    <div>
+
+                        <label asp-for="Id">
+                            Student ID
+                        </label>
+
+                        <input asp-for="Id"
+                               type="number"
+                               min="1" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="Name">
+                            Name
+                        </label>
+
+                        <input asp-for="Name"
+                               type="text"
+                               placeholder="Student name" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="Age">
+                            Age
+                        </label>
+
+                        <input asp-for="Age"
+                               type="number"
+                               min="16"
+                               max="80" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="Course">
+                            Course
+                        </label>
+
+                        <input asp-for="Course"
+                               type="text"
+                               placeholder="Course name" />
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit"
+                        class="add-button">
+
+                    Add Student
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- Edit Student -->
+        <!-- ========================= -->
+        @if (Model.EditId > 0)
+        {
+            <section class="card edit-card">
+
+                <h2>Edit Student</h2>
+
+                <p class="edit-description">
+                    Update the student information below.
+                </p>
+
+
+                <form method="post"
+                      asp-page-handler="Update">
+
+
+                    <input asp-for="EditId"
+                           type="hidden" />
+
+
+                    <div class="form-grid">
+
+                        <div>
+
+                            <label>
+                                Student ID
+                            </label>
+
+                            <input value="@Model.EditId"
+                                   type="number"
+                                   disabled />
+
+                        </div>
+
+
+                        <div>
+
+                            <label asp-for="EditName">
+                                Name
+                            </label>
+
+                            <input asp-for="EditName"
+                                   type="text" />
+
+                        </div>
+
+
+                        <div>
+
+                            <label asp-for="EditAge">
+                                Age
+                            </label>
+
+                            <input asp-for="EditAge"
+                                   type="number"
+                                   min="16"
+                                   max="80" />
+
+                        </div>
+
+
+                        <div>
+
+                            <label asp-for="EditCourse">
+                                Course
+                            </label>
+
+                            <input asp-for="EditCourse"
+                                   type="text" />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="edit-buttons">
+
+                        <button type="submit"
+                                class="update-button">
+
+                            Save Changes
+
+                        </button>
+
+
+                        <a asp-page="/Index"
+                           class="cancel-button">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+        }
+
+
+        <!-- ========================= -->
+        <!-- Filters -->
+        <!-- ========================= -->
+
+        <section class="card">
+
+            <h2>Filter Students</h2>
+
+
+            <form method="get">
+
+                <div class="filter-grid">
+
+
+                    <div>
+
+                        <label asp-for="SearchName">
+                            Search by Name
+                        </label>
+
+                        <input asp-for="SearchName"
+                               type="text"
+                               placeholder="Enter a name..." />
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="CourseFilter">
+                            Course
+                        </label>
+
+                        <select asp-for="CourseFilter">
+
+                            <option value="">
+                                All Courses
+                            </option>
+
+
+                            @foreach (string course in Model.Courses)
+                            {
+                                <option value="@course">
+                                    @course
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="SortBy">
+                            Sort By
+                        </label>
+
+                        <select asp-for="SortBy">
+
+                            <option value="">
+                                Student ID
+                            </option>
+
+                            <option value="name">
+                                Name
+                            </option>
+
+                            <option value="age">
+                                Age
+                            </option>
+
+                            <option value="course">
+                                Course
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-buttons">
+
+                    <button type="submit"
+                            class="filter-button">
+
+                        Apply Filters
+
+                    </button>
+
+
+                    <a asp-page="/Index"
+                       class="reset-button">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- Student List -->
+        <!-- ========================= -->
+
+        <section class="card">
+
+            <div class="list-heading">
+
+                <h2>
+                    Student Records
+                </h2>
+
+                <span>
+
+                    @Model.Students.Count students
+
+                </span>
+
+            </div>
+
+
+            @if (Model.Students.Count == 0)
+            {
+                <div class="empty">
+
+                    No students match your filters.
+
+                </div>
+            }
+            else
+            {
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Course</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var student in Model.Students)
+                        {
+                            <tr>
+
+                                <td>
+                                    @student.Id
+                                </td>
+
+                                <td>
+                                    @student.Name
+                                </td>
+
+                                <td>
+                                    @student.Age
+                                </td>
+
+                                <td>
+                                    @student.Course
+                                </td>
+
+                                <td>
+
+                                    <div class="action-buttons">
+
+
+                                        <!-- Edit -->
+
+                                        <a asp-page="/Index"
+                                           asp-page-handler="Edit"
+                                           asp-route-id="@student.Id"
+                                           class="edit-button">
+
+                                            Edit
+
+                                        </a>
+
+
+                                        <!-- Delete -->
+
+                                        <form method="post"
+                                              asp-page-handler="Delete"
+                                              asp-route-id="@student.Id">
+
+                                            <button type="submit"
+                                                    class="delete-button">
+
+                                                Delete
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            }
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
