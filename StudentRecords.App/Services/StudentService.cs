@@ -106,6 +106,15 @@ namespace StudentRecords.App.Services
         {
             student.Validate();
 
+            Student? existingStudent =
+                _studentRepository.GetById(student.Id);
+
+            if (existingStudent != null)
+            {
+                throw new ArgumentException(
+                    $"A student with ID {student.Id} already exists.");
+            }
+
             _studentRepository.Add(student);
 
             _logger?.Log(

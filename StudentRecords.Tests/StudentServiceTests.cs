@@ -1,23 +1,27 @@
-﻿using StudentRecords.App.Exceptions;
+﻿using NUnit.Framework;
+using StudentRecords.App.Exceptions;
 using StudentRecords.App.Models;
 using StudentRecords.App.Services;
 
 namespace StudentRecords.Tests
 {
+    [TestFixture]
     public class StudentServiceTests
     {
-        private readonly InMemoryStudentRepository _repository;
-        private readonly StudentService _service;
+        private InMemoryStudentRepository _repository = null!;
+        private StudentService _service = null!;
 
-        public StudentServiceTests()
+        [SetUp]
+        public void SetUp()
         {
             _repository = new InMemoryStudentRepository();
             _service = new StudentService(_repository);
         }
 
-        [Fact]
+        [Test]
         public void AddStudent_AddsStudentSuccessfully()
         {
+            // Arrange
             Student student = new Student
             {
                 Id = 1,
@@ -26,15 +30,49 @@ namespace StudentRecords.Tests
                 Course = "Cyber Security"
             };
 
+            // Act
             _service.AddStudent(student);
 
             List<Student> students = _service.GetAllStudents();
 
-            Assert.Single(students);
-            Assert.Equal("Maria", students[0].Name);
+            // Assert
+            Assert.That(students, Has.Count.EqualTo(1));
+            Assert.That(students[0].Name, Is.EqualTo("Maria"));
         }
 
-        [Fact]
+        [Test]
+        public void AddStudent_WithDuplicateId_ThrowsException()
+        {
+            // Arrange
+            Student firstStudent = new Student
+            {
+                Id = 1,
+                Name = "Maria",
+                Age = 22,
+                Course = "Cyber Security"
+            };
+
+            Student secondStudent = new Student
+            {
+                Id = 1,
+                Name = "Ana",
+                Age = 20,
+                Course = "Computer Science"
+            };
+
+            _service.AddStudent(firstStudent);
+
+            // Act and Assert
+            ArgumentException? exception =
+                Assert.Throws<ArgumentException>(
+                    () => _service.AddStudent(secondStudent));
+
+            Assert.That(
+                exception!.Message,
+                Does.Contain("already exists"));
+        }
+
+        [Test]
         public void GetStudentById_ReturnsCorrectStudent()
         {
             Student student = new Student
@@ -49,20 +87,20 @@ namespace StudentRecords.Tests
 
             Student result = _service.GetStudentById(1);
 
-            Assert.Equal(1, result.Id);
-            Assert.Equal("Maria", result.Name);
-            Assert.Equal(22, result.Age);
-            Assert.Equal("Cyber Security", result.Course);
+            Assert.That(result.Id, Is.EqualTo(1));
+            Assert.That(result.Name, Is.EqualTo("Maria"));
+            Assert.That(result.Age, Is.EqualTo(22));
+            Assert.That(result.Course, Is.EqualTo("Cyber Security"));
         }
 
-        [Fact]
+        [Test]
         public void GetStudentById_WhenStudentDoesNotExist_ThrowsException()
         {
             Assert.Throws<StudentNotFoundException>(
                 () => _service.GetStudentById(99));
         }
 
-        [Fact]
+        [Test]
         public void UpdateStudent_UpdatesExistingStudent()
         {
             Student student = new Student
@@ -87,12 +125,12 @@ namespace StudentRecords.Tests
 
             Student result = _service.GetStudentById(1);
 
-            Assert.Equal("Maria Motter", result.Name);
-            Assert.Equal(23, result.Age);
-            Assert.Equal("Computer Science", result.Course);
+            Assert.That(result.Name, Is.EqualTo("Maria Motter"));
+            Assert.That(result.Age, Is.EqualTo(23));
+            Assert.That(result.Course, Is.EqualTo("Computer Science"));
         }
 
-        [Fact]
+        [Test]
         public void UpdateStudent_WhenStudentDoesNotExist_ThrowsException()
         {
             Student student = new Student
@@ -107,7 +145,7 @@ namespace StudentRecords.Tests
                 () => _service.UpdateStudent(student));
         }
 
-        [Fact]
+        [Test]
         public void DeleteStudent_RemovesStudent()
         {
             Student student = new Student
@@ -124,19 +162,18 @@ namespace StudentRecords.Tests
 
             List<Student> students = _service.GetAllStudents();
 
-            Assert.Empty(students);
+            Assert.That(students, Is.Empty);
         }
 
-        [Fact]
+        [Test]
         public void DeleteStudent_WhenStudentDoesNotExist_ThrowsException()
         {
             Assert.Throws<StudentNotFoundException>(
                 () => _service.DeleteStudent(99));
         }
 
-        [Theory]
-        [InlineData(15)]
-        [InlineData(81)]
+        [TestCase(15)]
+        [TestCase(81)]
         public void AddStudent_WithInvalidAge_ThrowsException(int age)
         {
             Student student = new Student
@@ -151,7 +188,7 @@ namespace StudentRecords.Tests
                 () => _service.AddStudent(student));
         }
 
-        [Fact]
+        [Test]
         public void AddStudent_WithInvalidId_ThrowsException()
         {
             Student student = new Student
@@ -166,7 +203,7 @@ namespace StudentRecords.Tests
                 () => _service.AddStudent(student));
         }
 
-        [Fact]
+        [Test]
         public void AddStudent_WithEmptyName_ThrowsException()
         {
             Student student = new Student
@@ -181,7 +218,7 @@ namespace StudentRecords.Tests
                 () => _service.AddStudent(student));
         }
 
-        [Fact]
+        [Test]
         public void AddStudent_WithEmptyCourse_ThrowsException()
         {
             Student student = new Student

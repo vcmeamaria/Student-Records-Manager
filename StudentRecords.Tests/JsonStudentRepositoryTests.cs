@@ -1,14 +1,17 @@
-﻿using StudentRecords.App.Models;
+﻿using NUnit.Framework;
+using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 
 namespace StudentRecords.Tests
 {
-    public class JsonStudentRepositoryTests : IDisposable
+    [TestFixture]
+    public class JsonStudentRepositoryTests
     {
-        private readonly string _testFilePath;
-        private readonly JsonStudentRepository _repository;
+        private string _testFilePath = null!;
+        private JsonStudentRepository _repository = null!;
 
-        public JsonStudentRepositoryTests()
+        [SetUp]
+        public void SetUp()
         {
             _testFilePath =
                 Path.Combine(
@@ -19,15 +22,24 @@ namespace StudentRecords.Tests
                 new JsonStudentRepository(_testFilePath);
         }
 
-        [Fact]
+        [TearDown]
+        public void TearDown()
+        {
+            if (File.Exists(_testFilePath))
+            {
+                File.Delete(_testFilePath);
+            }
+        }
+
+        [Test]
         public void GetAll_WhenFileDoesNotExist_ReturnsEmptyList()
         {
             List<Student> students = _repository.GetAll();
 
-            Assert.Empty(students);
+            Assert.That(students, Is.Empty);
         }
 
-        [Fact]
+        [Test]
         public void Add_SavesStudentToFile()
         {
             Student student = new Student
@@ -42,14 +54,14 @@ namespace StudentRecords.Tests
 
             List<Student> students = _repository.GetAll();
 
-            Assert.Single(students);
-            Assert.Equal(1, students[0].Id);
-            Assert.Equal("Maria", students[0].Name);
-            Assert.Equal(22, students[0].Age);
-            Assert.Equal("Cyber Security", students[0].Course);
+            Assert.That(students, Has.Count.EqualTo(1));
+            Assert.That(students[0].Id, Is.EqualTo(1));
+            Assert.That(students[0].Name, Is.EqualTo("Maria"));
+            Assert.That(students[0].Age, Is.EqualTo(22));
+            Assert.That(students[0].Course, Is.EqualTo("Cyber Security"));
         }
 
-        [Fact]
+        [Test]
         public void GetById_WhenStudentExists_ReturnsStudent()
         {
             Student student = new Student
@@ -64,19 +76,19 @@ namespace StudentRecords.Tests
 
             Student? result = _repository.GetById(1);
 
-            Assert.NotNull(result);
-            Assert.Equal("Maria", result.Name);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Name, Is.EqualTo("Maria"));
         }
 
-        [Fact]
+        [Test]
         public void GetById_WhenStudentDoesNotExist_ReturnsNull()
         {
             Student? result = _repository.GetById(99);
 
-            Assert.Null(result);
+            Assert.That(result, Is.Null);
         }
 
-        [Fact]
+        [Test]
         public void Update_ChangesExistingStudent()
         {
             Student student = new Student
@@ -101,13 +113,13 @@ namespace StudentRecords.Tests
 
             Student? result = _repository.GetById(1);
 
-            Assert.NotNull(result);
-            Assert.Equal("Maria Motter", result.Name);
-            Assert.Equal(23, result.Age);
-            Assert.Equal("Computer Science", result.Course);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Name, Is.EqualTo("Maria Motter"));
+            Assert.That(result.Age, Is.EqualTo(23));
+            Assert.That(result.Course, Is.EqualTo("Computer Science"));
         }
 
-        [Fact]
+        [Test]
         public void Delete_RemovesStudent()
         {
             Student student = new Student
@@ -124,15 +136,7 @@ namespace StudentRecords.Tests
 
             List<Student> students = _repository.GetAll();
 
-            Assert.Empty(students);
-        }
-
-        public void Dispose()
-        {
-            if (File.Exists(_testFilePath))
-            {
-                File.Delete(_testFilePath);
-            }
+            Assert.That(students, Is.Empty);
         }
     }
 }
