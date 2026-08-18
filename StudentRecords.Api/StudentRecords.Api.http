@@ -1,0 +1,44 @@
+@StudentRecords_Api_HostAddress = https://localhost:7083
+
+### Get all students
+GET {{StudentRecords_Api_HostAddress}}/students
+Accept: application/json
+
+###
+
+### Get student by ID
+GET {{StudentRecords_Api_HostAddress}}/students/1
+Accept: application/json
+
+###
+
+### Add a new student
+POST {{StudentRecords_Api_HostAddress}}/students
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "Gabby",
+  "age": 21,
+  "course": "Cyber Security"
+}
+
+###
+
+### Update student
+PUT {{StudentRecords_Api_HostAddress}}/students/4
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "Gabby Smith",
+  "age": 22,
+  "course": "Computer Science"
+}
+
+###
+
+### Delete student
+DELETE {{StudentRecords_Api_HostAddress}}/students/4
+
+###
