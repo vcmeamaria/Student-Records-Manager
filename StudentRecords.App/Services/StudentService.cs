@@ -1,4 +1,5 @@
 ﻿using StudentRecords.App.Exceptions;
+using StudentRecords.App.Logging;
 using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 
@@ -7,10 +8,14 @@ namespace StudentRecords.App.Services
     public class StudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ILogger? _logger;
 
-        public StudentService(IStudentRepository studentRepository)
+        public StudentService(
+            IStudentRepository studentRepository,
+            ILogger? logger = null)
         {
             _studentRepository = studentRepository;
+            _logger = logger;
         }
 
         public List<Student> GetAllStudents()
@@ -80,6 +85,9 @@ namespace StudentRecords.App.Services
             }
 
             File.WriteAllLines(filePath, lines);
+
+            _logger?.Log(
+                $"Student records exported to CSV: {filePath}");
         }
 
         public Student GetStudentById(int id)
@@ -103,6 +111,9 @@ namespace StudentRecords.App.Services
                 student.Course);
 
             _studentRepository.Add(student);
+
+            _logger?.Log(
+                $"Student added: ID {student.Id} - {student.Name}");
         }
 
         public void UpdateStudent(Student student)
@@ -122,6 +133,9 @@ namespace StudentRecords.App.Services
             }
 
             _studentRepository.Update(student);
+
+            _logger?.Log(
+                $"Student updated: ID {student.Id} - {student.Name}");
         }
 
         public void DeleteStudent(int id)
@@ -134,6 +148,9 @@ namespace StudentRecords.App.Services
             }
 
             _studentRepository.Delete(id);
+
+            _logger?.Log(
+                $"Student deleted: ID {student.Id} - {student.Name}");
         }
 
         private static void Validate(

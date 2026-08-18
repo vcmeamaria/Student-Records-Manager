@@ -1,4 +1,5 @@
 ﻿using StudentRecords.App.Exceptions;
+using StudentRecords.App.Logging;
 using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 using StudentRecords.App.Services;
@@ -22,9 +23,16 @@ Directory.CreateDirectory(dataDirectory);
 IStudentRepository repository =
     new JsonStudentRepository(dataFilePath);
 
+// Create the logger.
+string logFilePath =
+    Path.Combine(dataDirectory, "student-records.log");
+
+ILogger logger =
+    new FileLogger(logFilePath);
+
 // Create the service.
 StudentService studentService =
-    new StudentService(repository);
+    new StudentService(repository, logger);
 
 // Keep the menu running.
 bool keepRunning = true;
