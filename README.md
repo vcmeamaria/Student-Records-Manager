@@ -25,7 +25,7 @@ The project started as a console application and was later extended with JSON pe
 * C#
 * .NET
 * ASP.NET Core
-* xUnit
+* NUnit
 * LINQ
 * JSON
 * CSV
