@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="StudentRecords.Api/StudentRecords.Api.csproj" />
   <Project Path="StudentRecords.App/StudentRecords.App.csproj" />
   <Project Path="StudentRecords.Tests/StudentRecords.Tests.csproj" />
 </Solution>
