@@ -1,12 +1,8 @@
 ﻿namespace StudentRecords.App.Models
 {
-    public class Student
+    public class Student : Person
     {
         public int Id { get; set; }
-
-        public string Name { get; set; } = "";
-
-        public int Age { get; set; }
 
         public string Course { get; set; } = "";
     }
