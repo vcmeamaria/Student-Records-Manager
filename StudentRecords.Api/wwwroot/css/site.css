@@ -10,10 +10,15 @@ body {
 }
 
 .container {
-    width: 90%;
-    max-width: 1100px;
+    width: 92%;
+    max-width: 1400px;
     margin: 40px auto;
 }
+
+
+/* ==============================
+   Header
+   ============================== */
 
 header {
     text-align: center;
@@ -28,6 +33,11 @@ header {
         color: #6b7280;
     }
 
+
+/* ==============================
+   Cards
+   ============================== */
+
 .card {
     background: white;
     border-radius: 12px;
@@ -36,9 +46,19 @@ header {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
+
+/* ==============================
+   Forms
+   ============================== */
+
+.form-note {
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 18px;
 }
 
@@ -55,6 +75,26 @@ input {
     border-radius: 7px;
 }
 
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccd3df;
+    border-radius: 7px;
+    background: white;
+}
+
+.mark-help {
+    display: block;
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* ==============================
+   Add Button
+   ============================== */
+
 .add-button {
     margin-top: 20px;
     padding: 11px 22px;
@@ -65,41 +105,10 @@ input {
     cursor: pointer;
 }
 
-.delete-button {
-    padding: 7px 13px;
-    border: none;
-    border-radius: 6px;
-    background: #e98686;
-    color: white;
-    cursor: pointer;
-}
 
-.list-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-    .list-heading span {
-        color: #6b7280;
-    }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid #e4e7ed;
-    text-align: left;
-}
-
-th {
-    background: #f5f7fb;
-}
+/* ==============================
+   Messages
+   ============================== */
 
 .success {
     padding: 10px;
@@ -115,62 +124,10 @@ th {
     background: #fde8e8;
 }
 
-.empty {
-    text-align: center;
-    padding: 35px;
-    color: #777;
-}
 
-@media (max-width: 700px) {
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.filter-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 18px;
-}
-
-select {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid #ccd3df;
-    border-radius: 7px;
-    background: white;
-}
-
-.filter-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.filter-button {
-    padding: 11px 22px;
-    border: none;
-    border-radius: 7px;
-    background: #506ca8;
-    color: white;
-    cursor: pointer;
-}
-
-.reset-button {
-    padding: 11px 22px;
-    border-radius: 7px;
-    background: #e7e9ef;
-    color: #253047;
-    text-decoration: none;
-}
-
-@media (max-width: 700px) {
-
-    .filter-grid {
-        grid-template-columns: 1fr;
-    }
-}
+/* ==============================
+   Edit Student
+   ============================== */
 
 .edit-card {
     border-left: 5px solid #506ca8;
@@ -204,6 +161,161 @@ select {
     text-decoration: none;
 }
 
+
+/* ==============================
+   Filters
+   ============================== */
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 18px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.filter-button {
+    padding: 11px 22px;
+    border: none;
+    border-radius: 7px;
+    background: #506ca8;
+    color: white;
+    cursor: pointer;
+}
+
+.reset-button {
+    padding: 11px 22px;
+    border-radius: 7px;
+    background: #e7e9ef;
+    color: #253047;
+    text-decoration: none;
+}
+
+
+/* ==============================
+   Mark Guide
+   ============================== */
+
+.mark-guide-card {
+    border-left: 5px solid #506ca8;
+}
+
+.mark-guide-heading h2 {
+    margin-bottom: 5px;
+}
+
+.mark-guide-heading p {
+    margin-top: 0;
+    color: #6b7280;
+}
+
+.mark-guide {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.grade-box {
+    padding: 18px;
+    background: #f5f7fb;
+    border: 1px solid #e0e5ee;
+    border-radius: 9px;
+    text-align: center;
+}
+
+.grade-letter {
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #253047;
+}
+
+.grade-range {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+}
+
+
+/* Grade A - light pastel green */
+
+.grade-a {
+    background: #e8f7ee;
+    border-color: #cfe9d9;
+}
+
+
+/* Grade Fail - light pastel pink */
+
+.grade-fail {
+    background: #fff1f5;
+    border-color: #f3d8e1;
+}
+
+
+/* Not graded note */
+
+.not-graded-note {
+    margin-top: 16px;
+    margin-bottom: 0;
+    color: #6b7280;
+}
+
+
+/* ==============================
+   Student Table
+   ============================== */
+
+.list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .list-heading span {
+        color: #6b7280;
+    }
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 1050px;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e4e7ed;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background: #f5f7fb;
+}
+
+.empty {
+    text-align: center;
+    padding: 35px;
+    color: #777;
+}
+
+
+/* ==============================
+   Table Actions
+   ============================== */
+
 .action-buttons {
     display: flex;
     align-items: center;
@@ -221,4 +333,51 @@ select {
     background: #6e83b7;
     color: white;
     text-decoration: none;
+}
+
+.delete-button {
+    padding: 7px 13px;
+    border: none;
+    border-radius: 6px;
+    background: #e98686;
+    color: white;
+    cursor: pointer;
+}
+
+
+/* ==============================
+   Responsive Layout
+   ============================== */
+
+@media (max-width: 900px) {
+
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mark-guide {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mark-guide {
+        grid-template-columns: 1fr;
+    }
+
+    .list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
 }

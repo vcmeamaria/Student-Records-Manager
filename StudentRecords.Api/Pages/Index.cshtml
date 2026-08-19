@@ -9,7 +9,9 @@
 
     <meta charset="utf-8" />
 
-    <title>Student Records Manager</title>
+    <title>
+        Student Records Manager
+    </title>
 
     <link rel="stylesheet"
           href="~/css/site.css" />
@@ -21,9 +23,12 @@
 
     <main class="container">
 
+
         <header>
 
-            <h1>Student Records Manager</h1>
+            <h1>
+                Student Records Manager
+            </h1>
 
             <p>
                 Manage university student records
@@ -35,7 +40,8 @@
         <!-- ========================= -->
         <!-- Messages -->
         <!-- ========================= -->
-        @if (!string.IsNullOrWhiteSpace(Model.Message))
+        @if (!string.IsNullOrWhiteSpace(
+                    Model.Message))
         {
             <div class="success">
 
@@ -45,7 +51,8 @@
         }
 
 
-        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        @if (!string.IsNullOrWhiteSpace(
+            Model.ErrorMessage))
         {
             <div class="error">
 
@@ -61,13 +68,22 @@
 
         <section class="card">
 
-            <h2>Add Student</h2>
+            <h2>
+                Add Student
+            </h2>
+
+            <p class="form-note">
+                The university email and grade
+                are generated automatically.
+                Mark is optional.
+            </p>
 
 
             <form method="post"
                   asp-page-handler="Add">
 
                 <div class="form-grid">
+
 
                     <div>
 
@@ -90,7 +106,20 @@
 
                         <input asp-for="Name"
                                type="text"
-                               placeholder="Student name" />
+                               placeholder="First name" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label asp-for="Surname">
+                            Surname
+                        </label>
+
+                        <input asp-for="Surname"
+                               type="text"
+                               placeholder="Surname" />
 
                     </div>
 
@@ -121,6 +150,27 @@
 
                     </div>
 
+
+                    <div>
+
+                        <label asp-for="Mark">
+                            Mark
+                        </label>
+
+                        <input asp-for="Mark"
+                               type="number"
+                               min="0"
+                               max="100"
+                               placeholder="Optional" />
+
+                        <small class="mark-help">
+                            Leave blank if the student
+                            has not been graded yet.
+                        </small>
+
+                    </div>
+
+
                 </div>
 
 
@@ -130,6 +180,7 @@
                     Add Student
 
                 </button>
+
 
             </form>
 
@@ -143,10 +194,13 @@
         {
             <section class="card edit-card">
 
-                <h2>Edit Student</h2>
+                <h2>
+                    Edit Student
+                </h2>
 
                 <p class="edit-description">
                     Update the student information below.
+                    The email and grade update automatically.
                 </p>
 
 
@@ -159,6 +213,7 @@
 
 
                     <div class="form-grid">
+
 
                         <div>
 
@@ -180,6 +235,18 @@
                             </label>
 
                             <input asp-for="EditName"
+                                   type="text" />
+
+                        </div>
+
+
+                        <div>
+
+                            <label asp-for="EditSurname">
+                                Surname
+                            </label>
+
+                            <input asp-for="EditSurname"
                                    type="text" />
 
                         </div>
@@ -210,6 +277,26 @@
 
                         </div>
 
+
+                        <div>
+
+                            <label asp-for="EditMark">
+                                Mark
+                            </label>
+
+                            <input asp-for="EditMark"
+                                   type="number"
+                                   min="0"
+                                   max="100"
+                                   placeholder="Optional" />
+
+                            <small class="mark-help">
+                                Leave blank if not graded.
+                            </small>
+
+                        </div>
+
+
                     </div>
 
 
@@ -232,6 +319,7 @@
 
                     </div>
 
+
                 </form>
 
             </section>
@@ -244,7 +332,9 @@
 
         <section class="card">
 
-            <h2>Filter Students</h2>
+            <h2>
+                Filter Students
+            </h2>
 
 
             <form method="get">
@@ -255,12 +345,12 @@
                     <div>
 
                         <label asp-for="SearchName">
-                            Search by Name
+                            Search
                         </label>
 
                         <input asp-for="SearchName"
                                type="text"
-                               placeholder="Enter a name..." />
+                               placeholder="Name, surname or email..." />
 
                     </div>
 
@@ -278,7 +368,9 @@
                             </option>
 
 
-                            @foreach (string course in Model.Courses)
+                            @foreach (
+                                string course
+                                in Model.Courses)
                             {
                                 <option value="@course">
                                     @course
@@ -306,6 +398,10 @@
                                 Name
                             </option>
 
+                            <option value="surname">
+                                Surname
+                            </option>
+
                             <option value="age">
                                 Age
                             </option>
@@ -314,9 +410,14 @@
                                 Course
                             </option>
 
+                            <option value="mark">
+                                Mark - Highest First
+                            </option>
+
                         </select>
 
                     </div>
+
 
                 </div>
 
@@ -340,16 +441,127 @@
 
                 </div>
 
+
             </form>
 
         </section>
 
 
         <!-- ========================= -->
-        <!-- Student List -->
+        <!-- Mark Guide -->
+        <!-- ========================= -->
+
+        <section class="card mark-guide-card">
+
+            <div class="mark-guide-heading">
+
+                <h2>
+                    Mark Guide
+                </h2>
+
+                <p>
+                    Grades are generated automatically
+                    from the student's mark.
+                </p>
+
+            </div>
+
+
+            <div class="mark-guide">
+
+
+                <!-- A -->
+
+                <div class="grade-box grade-a">
+
+                    <span class="grade-letter">
+                        A
+                    </span>
+
+                    <span class="grade-range">
+                        80 - 100
+                    </span>
+
+                </div>
+
+
+                <!-- B -->
+
+                <div class="grade-box">
+
+                    <span class="grade-letter">
+                        B
+                    </span>
+
+                    <span class="grade-range">
+                        70 - 79
+                    </span>
+
+                </div>
+
+
+                <!-- C -->
+
+                <div class="grade-box">
+
+                    <span class="grade-letter">
+                        C
+                    </span>
+
+                    <span class="grade-range">
+                        60 - 69
+                    </span>
+
+                </div>
+
+
+                <!-- D -->
+
+                <div class="grade-box">
+
+                    <span class="grade-letter">
+                        D
+                    </span>
+
+                    <span class="grade-range">
+                        50 - 59
+                    </span>
+
+                </div>
+
+
+                <!-- Fail -->
+
+                <div class="grade-box grade-fail">
+
+                    <span class="grade-letter">
+                        Fail
+                    </span>
+
+                    <span class="grade-range">
+                        0 - 49
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <p class="not-graded-note">
+                <strong>/</strong>
+                means the student has not been graded yet.
+            </p>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- Student Records -->
         <!-- ========================= -->
 
         <section class="card">
+
 
             <div class="list-heading">
 
@@ -358,9 +570,7 @@
                 </h2>
 
                 <span>
-
                     @Model.Students.Count students
-
                 </span>
 
             </div>
@@ -376,92 +586,135 @@
             }
             else
             {
-                <table>
+                <div class="table-wrapper">
 
-                    <thead>
+                    <table>
 
-                        <tr>
+                        <thead>
 
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Course</th>
-                            <th>Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        @foreach (var student in Model.Students)
-                        {
                             <tr>
 
-                                <td>
-                                    @student.Id
-                                </td>
+                                <th>ID</th>
 
-                                <td>
-                                    @student.Name
-                                </td>
+                                <th>Name</th>
 
-                                <td>
-                                    @student.Age
-                                </td>
+                                <th>Surname</th>
 
-                                <td>
-                                    @student.Course
-                                </td>
+                                <th>Email</th>
 
-                                <td>
+                                <th>Age</th>
 
-                                    <div class="action-buttons">
+                                <th>Course</th>
 
+                                <th>Mark</th>
 
-                                        <!-- Edit -->
+                                <th>Grade</th>
 
-                                        <a asp-page="/Index"
-                                           asp-page-handler="Edit"
-                                           asp-route-id="@student.Id"
-                                           class="edit-button">
-
-                                            Edit
-
-                                        </a>
-
-
-                                        <!-- Delete -->
-
-                                        <form method="post"
-                                              asp-page-handler="Delete"
-                                              asp-route-id="@student.Id">
-
-                                            <button type="submit"
-                                                    class="delete-button">
-
-                                                Delete
-
-                                            </button>
-
-                                        </form>
-
-                                    </div>
-
-                                </td>
+                                <th>Actions</th>
 
                             </tr>
-                        }
 
-                    </tbody>
+                        </thead>
 
-                </table>
+
+                        <tbody>
+
+
+                            @foreach (
+                                var student
+                                in Model.Students)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @student.Id
+                                    </td>
+
+                                    <td>
+                                        @student.Name
+                                    </td>
+
+                                    <td>
+                                        @student.Surname
+                                    </td>
+
+                                    <td>
+                                        @student.Email
+                                    </td>
+
+                                    <td>
+                                        @student.Age
+                                    </td>
+
+                                    <td>
+                                        @student.Course
+                                    </td>
+
+
+                                    <!-- Optional mark -->
+
+                                    <td>
+                                        @(student.Mark?.ToString() ?? "/")
+                                    </td>
+
+
+                                    <!-- Generated grade -->
+
+                                    <td>
+                                        @student.Grade
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="action-buttons">
+
+
+                                            <a asp-page="/Index"
+                                               asp-page-handler="Edit"
+                                               asp-route-id="@student.Id"
+                                               class="edit-button">
+
+                                                Edit
+
+                                            </a>
+
+
+                                            <form method="post"
+                                                  asp-page-handler="Delete"
+                                                  asp-route-id="@student.Id">
+
+                                                <button type="submit"
+                                                        class="delete-button">
+
+                                                    Delete
+
+                                                </button>
+
+                                            </form>
+
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
             }
+
 
         </section>
 
+
     </main>
+
 
 </body>
 

@@ -22,10 +22,17 @@ namespace StudentRecords.Api.Pages
         public string Name { get; set; } = "";
 
         [BindProperty]
+        public string Surname { get; set; } = "";
+
+        [BindProperty]
         public int Age { get; set; }
 
         [BindProperty]
         public string Course { get; set; } = "";
+
+        // Mark is optional.
+        [BindProperty]
+        public int? Mark { get; set; }
 
 
         // ==============================
@@ -39,10 +46,16 @@ namespace StudentRecords.Api.Pages
         public string EditName { get; set; } = "";
 
         [BindProperty]
+        public string EditSurname { get; set; } = "";
+
+        [BindProperty]
         public int EditAge { get; set; }
 
         [BindProperty]
         public string EditCourse { get; set; } = "";
+
+        [BindProperty]
+        public int? EditMark { get; set; }
 
 
         // ==============================
@@ -83,9 +96,11 @@ namespace StudentRecords.Api.Pages
         // Constructor
         // ==============================
 
-        public IndexModel(StudentService studentService)
+        public IndexModel(
+            StudentService studentService)
         {
-            _studentService = studentService;
+            _studentService =
+                studentService;
         }
 
 
@@ -108,17 +123,35 @@ namespace StudentRecords.Api.Pages
             try
             {
                 Student student =
-                    _studentService.GetStudentById(id);
+                    _studentService
+                        .GetStudentById(id);
 
-                EditId = student.Id;
-                EditName = student.Name;
-                EditAge = student.Age;
-                EditCourse = student.Course;
+
+                EditId =
+                    student.Id;
+
+                EditName =
+                    student.Name;
+
+                EditSurname =
+                    student.Surname;
+
+                EditAge =
+                    student.Age;
+
+                EditCourse =
+                    student.Course;
+
+                EditMark =
+                    student.Mark;
             }
-            catch (StudentNotFoundException exception)
+            catch (
+                StudentNotFoundException exception)
             {
-                ErrorMessage = exception.Message;
+                ErrorMessage =
+                    exception.Message;
             }
+
 
             LoadStudents();
         }
@@ -132,25 +165,36 @@ namespace StudentRecords.Api.Pages
         {
             try
             {
-                Student student = new Student
-                {
-                    Id = Id,
-                    Name = Name,
-                    Age = Age,
-                    Course = Course
-                };
+                Student student =
+                    new Student
+                    {
+                        Id = Id,
+                        Name = Name,
+                        Surname = Surname,
+                        Age = Age,
+                        Course = Course,
+                        Mark = Mark
+                    };
 
-                _studentService.AddStudent(student);
+
+                _studentService
+                    .AddStudent(student);
+
 
                 Message =
-                    $"Student {student.Name} added successfully.";
+                    $"Student {student.Name} {student.Surname} " +
+                    $"added successfully. Email: {student.Email}";
+
 
                 ClearAddForm();
             }
-            catch (ArgumentException exception)
+            catch (
+                ArgumentException exception)
             {
-                ErrorMessage = exception.Message;
+                ErrorMessage =
+                    exception.Message;
             }
+
 
             LoadStudents();
         }
@@ -164,29 +208,42 @@ namespace StudentRecords.Api.Pages
         {
             try
             {
-                Student student = new Student
-                {
-                    Id = EditId,
-                    Name = EditName,
-                    Age = EditAge,
-                    Course = EditCourse
-                };
+                Student student =
+                    new Student
+                    {
+                        Id = EditId,
+                        Name = EditName,
+                        Surname = EditSurname,
+                        Age = EditAge,
+                        Course = EditCourse,
+                        Mark = EditMark
+                    };
 
-                _studentService.UpdateStudent(student);
+
+                _studentService
+                    .UpdateStudent(student);
+
 
                 Message =
-                    $"Student {student.Name} updated successfully.";
+                    $"Student {student.Name} {student.Surname} " +
+                    $"updated successfully. Email: {student.Email}";
+
 
                 ClearEditForm();
             }
-            catch (StudentNotFoundException exception)
+            catch (
+                StudentNotFoundException exception)
             {
-                ErrorMessage = exception.Message;
+                ErrorMessage =
+                    exception.Message;
             }
-            catch (ArgumentException exception)
+            catch (
+                ArgumentException exception)
             {
-                ErrorMessage = exception.Message;
+                ErrorMessage =
+                    exception.Message;
             }
+
 
             LoadStudents();
         }
@@ -200,15 +257,20 @@ namespace StudentRecords.Api.Pages
         {
             try
             {
-                _studentService.DeleteStudent(id);
+                _studentService
+                    .DeleteStudent(id);
+
 
                 Message =
                     $"Student ID {id} deleted successfully.";
             }
-            catch (StudentNotFoundException exception)
+            catch (
+                StudentNotFoundException exception)
             {
-                ErrorMessage = exception.Message;
+                ErrorMessage =
+                    exception.Message;
             }
+
 
             LoadStudents();
         }
@@ -221,66 +283,121 @@ namespace StudentRecords.Api.Pages
         private void LoadStudents()
         {
             List<Student> allStudents =
-                _studentService.GetAllStudents();
+                _studentService
+                    .GetAllStudents();
 
 
-            // Create course dropdown options.
-            Courses = allStudents
-                .Select(student => student.Course)
-                .Distinct()
-                .OrderBy(course => course)
-                .ToList();
+            Courses =
+                allStudents
+                    .Select(
+                        student =>
+                            student.Course)
+                    .Distinct()
+                    .OrderBy(
+                        course =>
+                            course)
+                    .ToList();
 
 
             IEnumerable<Student> filteredStudents =
                 allStudents;
 
 
-            // Search by name.
-            if (!string.IsNullOrWhiteSpace(SearchName))
+            // Search by name, surname or email.
+            if (!string.IsNullOrWhiteSpace(
+                SearchName))
             {
                 filteredStudents =
-                    filteredStudents.Where(student =>
-                        student.Name.Contains(
-                            SearchName,
-                            StringComparison.OrdinalIgnoreCase));
+                    filteredStudents
+                        .Where(student =>
+                            student.Name.Contains(
+                                SearchName,
+                                StringComparison.OrdinalIgnoreCase)
+
+                            ||
+
+                            student.Surname.Contains(
+                                SearchName,
+                                StringComparison.OrdinalIgnoreCase)
+
+                            ||
+
+                            $"{student.Name} {student.Surname}".Contains(
+                                SearchName,
+                                StringComparison.OrdinalIgnoreCase)
+
+                            ||
+
+                            student.Email.Contains(
+                                SearchName,
+                                StringComparison.OrdinalIgnoreCase));
             }
 
 
             // Filter by course.
-            if (!string.IsNullOrWhiteSpace(CourseFilter))
+            if (!string.IsNullOrWhiteSpace(
+                CourseFilter))
             {
                 filteredStudents =
-                    filteredStudents.Where(student =>
-                        student.Course.Equals(
-                            CourseFilter,
-                            StringComparison.OrdinalIgnoreCase));
+                    filteredStudents
+                        .Where(student =>
+                            student.Course.Equals(
+                                CourseFilter,
+                                StringComparison.OrdinalIgnoreCase));
             }
 
 
             // Sort students.
-            filteredStudents = SortBy switch
-            {
-                "name" =>
-                    filteredStudents.OrderBy(
-                        student => student.Name),
+            filteredStudents =
+                SortBy switch
+                {
+                    "name" =>
+                        filteredStudents
+                            .OrderBy(
+                                student =>
+                                    student.Name)
+                            .ThenBy(
+                                student =>
+                                    student.Surname),
 
-                "age" =>
-                    filteredStudents.OrderBy(
-                        student => student.Age),
+                    "surname" =>
+                        filteredStudents
+                            .OrderBy(
+                                student =>
+                                    student.Surname),
 
-                "course" =>
-                    filteredStudents.OrderBy(
-                        student => student.Course),
+                    "age" =>
+                        filteredStudents
+                            .OrderBy(
+                                student =>
+                                    student.Age),
 
-                _ =>
-                    filteredStudents.OrderBy(
-                        student => student.Id)
-            };
+                    "course" =>
+                        filteredStudents
+                            .OrderBy(
+                                student =>
+                                    student.Course),
+
+                    "mark" =>
+                        filteredStudents
+                            .OrderByDescending(
+                                student =>
+                                    student.Mark.HasValue)
+                            .ThenByDescending(
+                                student =>
+                                    student.Mark),
+
+                    _ =>
+                        filteredStudents
+                            .OrderBy(
+                                student =>
+                                    student.Id)
+                };
 
 
             Students =
-                filteredStudents.ToList();
+                filteredStudents
+                    .ToList();
         }
 
 
@@ -292,8 +409,10 @@ namespace StudentRecords.Api.Pages
         {
             Id = 0;
             Name = "";
+            Surname = "";
             Age = 0;
             Course = "";
+            Mark = null;
         }
 
 
@@ -305,8 +424,10 @@ namespace StudentRecords.Api.Pages
         {
             EditId = 0;
             EditName = "";
+            EditSurname = "";
             EditAge = 0;
             EditCourse = "";
+            EditMark = null;
         }
     }
 }
