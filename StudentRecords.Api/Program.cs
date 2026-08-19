@@ -2,18 +2,22 @@ using StudentRecords.App.Exceptions;
 using StudentRecords.App.Models;
 using StudentRecords.App.Repositories;
 using StudentRecords.App.Services;
+using StudentRecords.App.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Allow OpenAPI.
+
+// ==============================
+// Services
+// ==============================
+
 builder.Services.AddOpenApi();
 
-// Allow Razor Pages.
 builder.Services.AddRazorPages();
 
 
 // ==============================
-// Student Data
+// Data Paths
 // ==============================
 
 string solutionDirectory =
@@ -31,7 +35,9 @@ string dataDirectory =
         "StudentRecords.App",
         "Data");
 
-Directory.CreateDirectory(dataDirectory);
+Directory.CreateDirectory(
+    dataDirectory);
+
 
 string dataFilePath =
     Path.Combine(
@@ -39,21 +45,47 @@ string dataFilePath =
         "students.json");
 
 
+string logFilePath =
+    Path.Combine(
+        dataDirectory,
+        "student-records.log");
+
+
 // ==============================
 // Dependency Injection
 // ==============================
 
+// Repository
 builder.Services.AddSingleton<IStudentRepository>(
-    new JsonStudentRepository(dataFilePath));
+    new JsonStudentRepository(
+        dataFilePath));
 
+
+// Logger
+builder.Services.AddSingleton<
+    StudentRecords.App.Logging.ILogger>(
+        new FileLogger(
+            logFilePath));
+
+
+// Student Service
 builder.Services.AddSingleton<StudentService>(
     serviceProvider =>
         new StudentService(
-            serviceProvider.GetRequiredService<IStudentRepository>()));
+            serviceProvider
+                .GetRequiredService<IStudentRepository>(),
+
+            serviceProvider
+                .GetRequiredService<
+                    StudentRecords.App.Logging.ILogger>()));
 
 
-// Build application.
-var app = builder.Build();
+// ==============================
+// Build Application
+// ==============================
+
+var app =
+    builder.Build();
 
 
 // ==============================
@@ -67,75 +99,93 @@ if (app.Environment.IsDevelopment())
 
 
 // ==============================
-// Web Page
+// Web Interface
 // ==============================
 
-// Allow CSS and other static files.
 app.UseStaticFiles();
 
-// Enable Razor Pages.
 app.MapRazorPages();
 
 
 // ==============================
-// Web API Endpoints
+// REST API
 // ==============================
 
-// GET all students.
-app.MapGet("/students", (StudentService studentService) =>
-{
-    return Results.Ok(
-        studentService.GetAllStudents());
-});
+
+// GET all students
+app.MapGet(
+    "/students",
+    (StudentService studentService) =>
+    {
+        return Results.Ok(
+            studentService
+                .GetAllStudents());
+    });
 
 
-// GET student by ID.
-app.MapGet("/students/{id:int}",
-    (int id, StudentService studentService) =>
+// GET student by ID
+app.MapGet(
+    "/students/{id:int}",
+    (
+        int id,
+        StudentService studentService
+    ) =>
     {
         try
         {
             Student student =
-                studentService.GetStudentById(id);
+                studentService
+                    .GetStudentById(id);
 
-            return Results.Ok(student);
+            return Results.Ok(
+                student);
         }
-        catch (StudentNotFoundException exception)
+        catch (
+            StudentNotFoundException exception)
         {
             return Results.NotFound(
                 new
                 {
-                    message = exception.Message
+                    message =
+                        exception.Message
                 });
         }
     });
 
 
-// POST new student.
-app.MapPost("/students",
-    (Student student, StudentService studentService) =>
+// POST new student
+app.MapPost(
+    "/students",
+    (
+        Student student,
+        StudentService studentService
+    ) =>
     {
         try
         {
-            studentService.AddStudent(student);
+            studentService
+                .AddStudent(student);
 
             return Results.Created(
                 $"/students/{student.Id}",
                 student);
         }
-        catch (ArgumentException exception)
+        catch (
+            ArgumentException exception)
         {
             return Results.BadRequest(
                 new
                 {
-                    message = exception.Message
+                    message =
+                        exception.Message
                 });
         }
     });
 
 
-// PUT update student.
-app.MapPut("/students/{id:int}",
+// PUT update student
+app.MapPut(
+    "/students/{id:int}",
     (
         int id,
         Student student,
@@ -154,45 +204,58 @@ app.MapPut("/students/{id:int}",
 
         try
         {
-            studentService.UpdateStudent(student);
+            studentService
+                .UpdateStudent(student);
 
-            return Results.Ok(student);
+            return Results.Ok(
+                student);
         }
-        catch (StudentNotFoundException exception)
+        catch (
+            StudentNotFoundException exception)
         {
             return Results.NotFound(
                 new
                 {
-                    message = exception.Message
+                    message =
+                        exception.Message
                 });
         }
-        catch (ArgumentException exception)
+        catch (
+            ArgumentException exception)
         {
             return Results.BadRequest(
                 new
                 {
-                    message = exception.Message
+                    message =
+                        exception.Message
                 });
         }
     });
 
 
-// DELETE student.
-app.MapDelete("/students/{id:int}",
-    (int id, StudentService studentService) =>
+// DELETE student
+app.MapDelete(
+    "/students/{id:int}",
+    (
+        int id,
+        StudentService studentService
+    ) =>
     {
         try
         {
-            studentService.DeleteStudent(id);
+            studentService
+                .DeleteStudent(id);
 
             return Results.NoContent();
         }
-        catch (StudentNotFoundException exception)
+        catch (
+            StudentNotFoundException exception)
         {
             return Results.NotFound(
                 new
                 {
-                    message = exception.Message
+                    message =
+                        exception.Message
                 });
         }
     });

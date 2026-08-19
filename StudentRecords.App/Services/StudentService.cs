@@ -8,6 +8,7 @@ namespace StudentRecords.App.Services
     public class StudentService
     {
         private readonly IStudentRepository _studentRepository;
+
         private readonly ILogger? _logger;
 
 
@@ -19,8 +20,11 @@ namespace StudentRecords.App.Services
             IStudentRepository studentRepository,
             ILogger? logger = null)
         {
-            _studentRepository = studentRepository;
-            _logger = logger;
+            _studentRepository =
+                studentRepository;
+
+            _logger =
+                logger;
         }
 
 
@@ -30,7 +34,8 @@ namespace StudentRecords.App.Services
 
         public List<Student> GetAllStudents()
         {
-            return _studentRepository.GetAll();
+            return _studentRepository
+                .GetAll();
         }
 
 
@@ -42,8 +47,12 @@ namespace StudentRecords.App.Services
         {
             return _studentRepository
                 .GetAll()
-                .OrderBy(student => student.Name)
-                .ThenBy(student => student.Surname)
+                .OrderBy(
+                    student =>
+                        student.Name)
+                .ThenBy(
+                    student =>
+                        student.Surname)
                 .ToList();
         }
 
@@ -52,7 +61,9 @@ namespace StudentRecords.App.Services
         {
             return _studentRepository
                 .GetAll()
-                .OrderBy(student => student.Age)
+                .OrderBy(
+                    student =>
+                        student.Age)
                 .ToList();
         }
 
@@ -61,7 +72,9 @@ namespace StudentRecords.App.Services
         {
             return _studentRepository
                 .GetAll()
-                .OrderBy(student => student.Course)
+                .OrderBy(
+                    student =>
+                        student.Course)
                 .ToList();
         }
 
@@ -88,9 +101,10 @@ namespace StudentRecords.App.Services
 
                     ||
 
-                    $"{student.Name} {student.Surname}".Contains(
-                        searchTerm,
-                        StringComparison.OrdinalIgnoreCase)
+                    $"{student.Name} {student.Surname}"
+                        .Contains(
+                            searchTerm,
+                            StringComparison.OrdinalIgnoreCase)
 
                     ||
 
@@ -105,33 +119,42 @@ namespace StudentRecords.App.Services
         // Course Summary
         // ==============================
 
-        public Dictionary<string, int> GetCourseSummary()
+        public Dictionary<string, int>
+            GetCourseSummary()
         {
             return _studentRepository
                 .GetAll()
-                .GroupBy(student => student.Course)
+                .GroupBy(
+                    student =>
+                        student.Course)
                 .ToDictionary(
-                    group => group.Key,
-                    group => group.Count());
+                    group =>
+                        group.Key,
+
+                    group =>
+                        group.Count());
         }
 
 
         // ==============================
-        // Exercise 6
         // Student Marks Dictionary
         // ==============================
 
-        public Dictionary<string, int> GetStudentMarksDictionary()
+        public Dictionary<string, int>
+            GetStudentMarksDictionary()
         {
             return _studentRepository
                 .GetAll()
 
-                // Only students who have been graded.
-                .Where(student => student.Mark.HasValue)
+                .Where(
+                    student =>
+                        student.Mark.HasValue)
 
                 .ToDictionary(
                     student =>
-                        $"{student.Name} {student.Surname} - {student.Email}",
+                        $"{student.Name} " +
+                        $"{student.Surname} - " +
+                        $"{student.Email}",
 
                     student =>
                         student.Mark!.Value);
@@ -142,22 +165,31 @@ namespace StudentRecords.App.Services
         // Export Students to CSV
         // ==============================
 
-        public void ExportStudentsToCsv(string filePath)
+        public void ExportStudentsToCsv(
+            string filePath)
         {
             List<Student> students =
-                _studentRepository.GetAll();
+                _studentRepository
+                    .GetAll();
+
 
             List<string> lines =
                 new List<string>();
+
 
             lines.Add(
                 "Id,Name,Surname,Email,Age,Course,Mark,Grade");
 
 
-            foreach (Student student in students)
+            foreach (
+                Student student
+                in students)
             {
                 string mark =
-                    student.Mark?.ToString() ?? "/";
+                    student.Mark
+                        ?.ToString()
+                    ?? "/";
+
 
                 string line =
                     $"{student.Id}," +
@@ -169,7 +201,9 @@ namespace StudentRecords.App.Services
                     $"{mark}," +
                     $"{student.Grade}";
 
-                lines.Add(line);
+
+                lines.Add(
+                    line);
             }
 
 
@@ -187,15 +221,20 @@ namespace StudentRecords.App.Services
         // Get Student By ID
         // ==============================
 
-        public Student GetStudentById(int id)
+        public Student GetStudentById(
+            int id)
         {
             Student? student =
-                _studentRepository.GetById(id);
+                _studentRepository
+                    .GetById(id);
+
 
             if (student == null)
             {
-                throw new StudentNotFoundException(id);
+                throw new StudentNotFoundException(
+                    id);
             }
+
 
             return student;
         }
@@ -205,13 +244,16 @@ namespace StudentRecords.App.Services
         // Add Student
         // ==============================
 
-        public void AddStudent(Student student)
+        public void AddStudent(
+            Student student)
         {
             student.Validate();
 
 
             Student? existingStudent =
-                _studentRepository.GetById(student.Id);
+                _studentRepository
+                    .GetById(
+                        student.Id);
 
 
             if (existingStudent != null)
@@ -221,12 +263,25 @@ namespace StudentRecords.App.Services
             }
 
 
-            _studentRepository.Add(student);
+            _studentRepository
+                .Add(student);
+
+
+            string mark =
+                student.Mark
+                    ?.ToString()
+                ?? "/";
 
 
             _logger?.Log(
-                $"Student added: ID {student.Id} - " +
-                $"{student.Name} {student.Surname}");
+                $"Student added: " +
+                $"ID {student.Id} | " +
+                $"{student.Name} {student.Surname} | " +
+                $"Age: {student.Age} | " +
+                $"Course: {student.Course} | " +
+                $"Mark: {mark} | " +
+                $"Grade: {student.Grade} | " +
+                $"Email: {student.Email}");
         }
 
 
@@ -234,13 +289,16 @@ namespace StudentRecords.App.Services
         // Update Student
         // ==============================
 
-        public void UpdateStudent(Student student)
+        public void UpdateStudent(
+            Student student)
         {
             student.Validate();
 
 
             Student? existingStudent =
-                _studentRepository.GetById(student.Id);
+                _studentRepository
+                    .GetById(
+                        student.Id);
 
 
             if (existingStudent == null)
@@ -250,12 +308,64 @@ namespace StudentRecords.App.Services
             }
 
 
-            _studentRepository.Update(student);
+            // Save the old values before update.
+            string oldName =
+                existingStudent.Name;
+
+            string oldSurname =
+                existingStudent.Surname;
+
+            int oldAge =
+                existingStudent.Age;
+
+            string oldCourse =
+                existingStudent.Course;
+
+            int? oldMark =
+                existingStudent.Mark;
+
+            string oldGrade =
+                existingStudent.Grade;
+
+            string oldEmail =
+                existingStudent.Email;
 
 
+            // Perform update.
+            _studentRepository
+                .Update(student);
+
+
+            string oldMarkText =
+                oldMark
+                    ?.ToString()
+                ?? "/";
+
+
+            string newMarkText =
+                student.Mark
+                    ?.ToString()
+                ?? "/";
+
+
+            // Detailed audit log.
             _logger?.Log(
-                $"Student updated: ID {student.Id} - " +
-                $"{student.Name} {student.Surname}");
+                $"Student updated: " +
+                $"ID {student.Id} | " +
+
+                $"Name: {oldName} -> {student.Name} | " +
+
+                $"Surname: {oldSurname} -> {student.Surname} | " +
+
+                $"Age: {oldAge} -> {student.Age} | " +
+
+                $"Course: {oldCourse} -> {student.Course} | " +
+
+                $"Mark: {oldMarkText} -> {newMarkText} | " +
+
+                $"Grade: {oldGrade} -> {student.Grade} | " +
+
+                $"Email: {oldEmail} -> {student.Email}");
         }
 
 
@@ -263,24 +373,45 @@ namespace StudentRecords.App.Services
         // Delete Student
         // ==============================
 
-        public void DeleteStudent(int id)
+        public void DeleteStudent(
+            int id)
         {
             Student? student =
-                _studentRepository.GetById(id);
+                _studentRepository
+                    .GetById(id);
 
 
             if (student == null)
             {
-                throw new StudentNotFoundException(id);
+                throw new StudentNotFoundException(
+                    id);
             }
 
 
-            _studentRepository.Delete(id);
+            // Capture details before deleting.
+            string name =
+                student.Name;
+
+            string surname =
+                student.Surname;
+
+            string course =
+                student.Course;
+
+            string email =
+                student.Email;
+
+
+            _studentRepository
+                .Delete(id);
 
 
             _logger?.Log(
-                $"Student deleted: ID {student.Id} - " +
-                $"{student.Name} {student.Surname}");
+                $"Student deleted: " +
+                $"ID {id} | " +
+                $"{name} {surname} | " +
+                $"Course: {course} | " +
+                $"Email: {email}");
         }
     }
 }
