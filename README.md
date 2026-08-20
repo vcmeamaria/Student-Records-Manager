@@ -44,11 +44,11 @@ Name + Surname + Student ID + @University.com
 Example:
 
 ```text
-Name: Maria
-Surname: Motter
+Name: Tony
+Surname: Stark
 ID: 1
 
-MariaMotter1@University.com
+TonyStark1@University.com
 ```
 
 Because every student ID must be unique, each generated email address is also unique.
